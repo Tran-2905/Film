@@ -7,6 +7,7 @@ package dao;
 
 import Utils.DBUtils;
 import dto.Movie;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,9 +24,8 @@ import java.util.logging.Logger;
  * @author Admin
  */
 public class MovieDAO {
-    public void insertMovie(Movie movie) {
-        String sql = "INSERT INTO Movies (id, name, actor, category, time, language, image, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+    public boolean insertMovie(Movie movie) {
+        String sql = "INSERT INTO Movies (id, name, actor, category, time, language, image, description,isShowing) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -35,13 +35,18 @@ public class MovieDAO {
             stmt.setString(4, movie.getCategory());
             stmt.setInt(5, movie.getTime());
             stmt.setString(6, movie.getLanguage());
-            stmt.setBytes(7, movie.getImage());  // Lưu ảnh dưới dạng byte[]
+            if (movie.getImage() != null) {
+                stmt.setBinaryStream(7, new ByteArrayInputStream(movie.getImage()), movie.getImage().length);
+            } else {
+                stmt.setNull(7, Types.BLOB);
+            }
             stmt.setString(8, movie.getDescription());
-
-            stmt.executeUpdate();
+            stmt.setBoolean(9, movie.isIsShowing());
+            return stmt.executeUpdate()>0;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
     public List<Movie> getNowShowingMovies() {
         List<Movie> movieList = new ArrayList<>();
@@ -102,7 +107,7 @@ public class MovieDAO {
         try (Connection conn = DBUtils.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setString(1, "MV" + System.currentTimeMillis()); // Tạo ID ngẫu nhiên
+            stmt.setString(1, "MV" + System.currentTimeMillis()); 
             stmt.setString(2, name);
             stmt.setString(3, actor);
             stmt.setString(4, category);
@@ -118,7 +123,7 @@ public class MovieDAO {
             stmt.setString(8, description);
             stmt.setBoolean(9, isShowing);
 
-            return stmt.executeUpdate() > 0; // Trả về true nếu thêm thành công
+            return stmt.executeUpdate() > 0; 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

@@ -10,17 +10,20 @@ package dto;
  * @author Admin
  */
 public class Movie {
-     private String id;
+    private String id;
     private String name;
     private String actor;
     private String category;
     private int time;
     private String language;
-    private String image; 
+    private byte[] image;  
     private String description;
     private boolean isShowing;
 
-    public Movie(String id, String name, String actor, String category, int time, String language, String image, String description, boolean isShowing) {
+    public Movie() {}
+
+    public Movie(String id, String name, String actor, String category, int time, 
+                 String language, byte[] image, String description, boolean isShowing) {
         this.id = id;
         this.name = name;
         this.actor = actor;
@@ -31,20 +34,7 @@ public class Movie {
         this.description = description;
         this.isShowing = isShowing;
     }
-    
-     public Movie(String id, String name, String actor, String category, int time, String language, String image, String description) {
-        this.id = id;
-        this.name = name;
-        this.actor = actor;
-        this.category = category;
-        this.time = time;
-        this.language = language;
-        this.image = image;
-        this.description = description;
-    }
-    public Movie() {
-        
-    }
+
     public boolean isIsShowing() {
         return isShowing;
     }
@@ -53,6 +43,7 @@ public class Movie {
         this.isShowing = isShowing;
     }
 
+    // Getters và Setters
     public String getId() {
         return id;
     }
@@ -101,11 +92,11 @@ public class Movie {
         this.language = language;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -117,5 +108,11 @@ public class Movie {
         this.description = description;
     }
 
-   
+    public boolean isShowing() {
+        return isShowing;
+    }
+
+    public void setShowing(boolean isShowing) {
+        this.isShowing = isShowing;
+    }
 }

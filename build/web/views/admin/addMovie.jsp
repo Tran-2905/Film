@@ -46,6 +46,11 @@
         input[type="file"] {
             color: #000;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
         .form-button {
             width: 100%;
             padding: 10px;
@@ -60,6 +65,12 @@
         .form-button:hover {
             background-color: #E600E6;
         }
+        .back-button {
+            background-color: #00BFFF;
+        }
+        .back-button:hover {
+            background-color: #009ACD;
+        }
         .preview {
             margin-top: 10px;
             max-width: 100%;
@@ -73,11 +84,8 @@
         <!-- 
             Để upload file, cần method="post" và enctype="multipart/form-data"
         -->
-        <form action="addMovieController" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="id">ID:</label>
-                <input type="text" id="id" name="id" required>
-            </div>
+        <form action="<%= request.getContextPath() %>/MainController" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="addMovie">
             <div class="form-group">
                 <label for="name">Tên phim:</label>
                 <input type="text" id="name" name="name" required>
@@ -98,22 +106,18 @@
                 <label for="language">Ngôn ngữ:</label>
                 <input type="text" id="language" name="language">
             </div>
-            <!-- Trường để lưu tên file ảnh (nếu cần) -->
             <div class="form-group">
                 <label for="image">Tên file ảnh (tuỳ chọn):</label>
                 <input type="text" id="image" name="image">
             </div>
-            <!-- Phần chọn file từ máy -->
             <div class="form-group">
                 <label for="imageFile">Chọn ảnh từ máy tính:</label>
                 <input type="file" id="imageFile" name="imageFile" accept="image/*" onchange="previewFile(event)">
             </div>
-            <!-- Hoặc nhập đường dẫn ảnh -->
             <div class="form-group">
                 <label for="imageURL">Hoặc nhập đường dẫn ảnh:</label>
-                <input type="text" id="imageURL" name="imageURL" placeholder="Nhập URL ảnh" onchange="previewURL()">
+                <input type="text" id="imageFile" name="imageFile" placeholder="Nhập URL ảnh" onchange="previewURL()">
             </div>
-            <!-- Vùng xem trước ảnh -->
             <div class="form-group">
                 <img id="imgPreview" class="preview" src="#" alt="Xem trước ảnh" style="display: none;">
             </div>
@@ -125,8 +129,20 @@
                 <label for="isShowing">Đang chiếu:</label>
                 <input type="checkbox" id="isShowing" name="isShowing">
             </div>
-            <input type="submit" value="Thêm Phim" class="form-button">
+            <%
+                String message = (String) request.getAttribute("message"); 
+                 if (message != null) {
+            %>
+            <p class="message"><%=message.equals("null") ? "" : message%></p>
+            <%}%>
+            <div class="button-container">
+                <input type="submit" class="form-button">
+            </div>
+            <div class="button-container">
+                <button type="button" class="form-button back-button" onclick="window.location.href='<%= request.getContextPath() %>/views/home.jsp'">Trở Về Trang Chủ</button>
+            </div>
         </form>
+            
     </div>
     
     <script>
@@ -157,6 +173,22 @@
                 preview.style.display = 'none';
             }
         }
+        let base64Image = "";
+
+    function convertImageToBase64() {
+        var file = document.getElementById("imageFile").files[0];
+        var reader = new FileReader();
+        
+        reader.onloadend = function () {
+            base64Image = reader.result.split(",")[1]; // Lấy phần Base64 của ảnh
+            document.getElementById("imagePreview").src = reader.result;
+            document.getElementById("imagePreview").style.display = 'block';
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
     </script>
 </body>
 </html>

@@ -164,6 +164,7 @@
             <input type="text" placeholder="Tìm phim, rạp">
             <img src="<%= request.getContextPath() %>/image/searchbutton.png" width="400" height="16" alt="Search" class="search-icon">
         </div>
+        <div>
             <% if (user==null) { %>
                 <div class="user-actions">
                     <a href="views/login.jsp" class="login-btn">
@@ -180,6 +181,7 @@
                     </form>
                 </div>
             <%}%>
+        </div>
     </header>
 
 </body>

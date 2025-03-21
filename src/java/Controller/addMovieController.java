@@ -38,16 +38,30 @@ public class addMovieController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String id = request.getParameter("id");
             String name = request.getParameter("name");
             String actor = request.getParameter("actor");
             String category = request.getParameter("category");
-            String timeStr = request.getParameter("time");
+            int time = Integer.parseInt(request.getParameter("time"));
             String language = request.getParameter("language");
             String description = request.getParameter("description");
-            String isShowingStr = request.getParameter("isShowing");       
-            
+            boolean isShowing = request.getParameter("isShowing") != null;
+
+            // Xử lý file ảnh
+            InputStream inputStream = null;
+            Part filePart = request.getPart("imageFile");
+            if (filePart != null && filePart.getSize() > 0) {
+                inputStream = filePart.getInputStream();
+            }
+
+            // Gọi DAO để thêm phim
+            MovieDAO movieDAO = new MovieDAO();
+            boolean success = movieDAO.addMovie(name, actor, category, time, language, inputStream, filePart.getSize(), description, isShowing);
+
+            if (success) {
+                request.setAttribute("message", "add movie successful");
+            } else {
+                request.setAttribute("message", "add movie fail");
+            }
         }
     }
 

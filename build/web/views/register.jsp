@@ -149,7 +149,7 @@
         </form>
 
         <p class="login-text">Đã có tài khoản?</p>
-        <a href="login.jsp" class="login-btn">Đăng nhập</a>
+        <a href="views/login.jsp" class="login-btn">Đăng nhập</a>
     </div>
     </body>
 </html>

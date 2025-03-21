@@ -41,7 +41,7 @@ public class MainController extends HttpServlet {
                     url=processLogout(request, response);
                     break;
                 }
-                case "addMovies":{
+                case "addMovie":{
                     url="addMovieController";
                     break;
                 }
