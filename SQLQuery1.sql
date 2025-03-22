@@ -27,8 +27,8 @@ CREATE TABLE Movies (
     category NVARCHAR(100),
     time INT,
     language NVARCHAR(50),
-    image VARBINARY(MAX),  
+    image text,  
     description NVARCHAR(MAX),
 	isShowing BIT
 );
-select * from [User]
+select * from Movies

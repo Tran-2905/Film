@@ -167,7 +167,7 @@
         <div>
             <% if (user==null) { %>
                 <div class="user-actions">
-                    <a href="views/login.jsp" class="login-btn">
+                    <a href="${pageContext.request.contextPath}/views/login.jsp" class="login-btn">
                         <img src="<%= request.getContextPath() %>/image/iconuser.jpg" alt="User" class="icon">
                         Đăng nhập
                     </a>
@@ -175,7 +175,7 @@
             <%}else{ %>
                 <div class="user-section">
                     <span class="welcome-text">Xin chào, <span class="user-name">${sessionScope.user.fullName}</span>!</span>
-                    <form action="MainController" method="post" style="margin: 0;">
+                    <form action="${pageContext.request.contextPath}/MainController" method="post" style="margin: 0;">
                         <input type="hidden" name="action" value="logout"/>
                         <input type="submit" value="Đăng xuất" class="logout-btn"/>
                     </form>

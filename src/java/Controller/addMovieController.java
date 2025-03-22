@@ -6,12 +6,12 @@
 package Controller;
 
 import dao.MovieDAO;
+import dto.Movie;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +23,11 @@ import javax.servlet.http.Part;
  * @author Admin
  */
 @WebServlet(name = "addMovieController", urlPatterns = {"/addMovieController"})
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024,  // 1MB
+    maxFileSize = 1024 * 1024 * 10,   // 10MB
+    maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class addMovieController extends HttpServlet {
 
     /**
@@ -36,32 +41,63 @@ public class addMovieController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String name = request.getParameter("name");
-            String actor = request.getParameter("actor");
-            String category = request.getParameter("category");
-            int time = Integer.parseInt(request.getParameter("time"));
-            String language = request.getParameter("language");
-            String description = request.getParameter("description");
-            boolean isShowing = request.getParameter("isShowing") != null;
-
-            // Xử lý file ảnh
-            InputStream inputStream = null;
-            Part filePart = request.getPart("imageFile");
-            if (filePart != null && filePart.getSize() > 0) {
-                inputStream = filePart.getInputStream();
+            /* TODO output your page here. You may use following sample code. */
+            String name = request.getParameter("txtname");
+            if (name == null || name.trim().isEmpty()) {
+                request.setAttribute("ERROR", "name cannot be empty");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
             }
-
-            // Gọi DAO để thêm phim
+            String actor = request.getParameter("actor");
+            if (actor == null || actor.trim().isEmpty()) {
+                request.setAttribute("ERROR", "actor cannot be empty");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
+            }
+            String category = request.getParameter("category");
+            if (category == null || category.trim().isEmpty()) {
+                request.setAttribute("ERROR", "category cannot be empty");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
+            }
+            String time = request.getParameter("time");
+            if (time == null || !time.matches("\\d+")) {
+                request.setAttribute("ERROR", "Invalid time");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
+            }
+            int time1 = Integer.parseInt(time);
+            String language = request.getParameter("language");
+            if (language == null || language.trim().isEmpty()) {
+                request.setAttribute("ERROR", "language cannot be empty");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
+            }
+            String description = request.getParameter("description");
+            if (description == null || description.trim().isEmpty()) {
+                request.setAttribute("ERROR", "description cannot be empty");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
+            }
+            boolean isShowing = request.getParameter("isShowing") != null;
+            String image = request.getParameter("txtImage");
+            if (image == null || image.trim().isEmpty()) {
+                request.setAttribute("ERROR", "image cannot be empty");
+                request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+                return;
+            }
             MovieDAO movieDAO = new MovieDAO();
-            boolean success = movieDAO.addMovie(name, actor, category, time, language, inputStream, filePart.getSize(), description, isShowing);
-
+            boolean success = movieDAO.addMovie(name, actor, category, time1, language, image, description, isShowing);
+            Movie movie = new Movie(time, name, actor, category, time1, language, image, description, isShowing);
             if (success) {
                 request.setAttribute("message", "add movie successful");
+                
             } else {
                 request.setAttribute("message", "add movie fail");
+                request.setAttribute("Movie", movie);
             }
+            request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
         }
     }
 
@@ -91,33 +127,8 @@ public class addMovieController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String actor = request.getParameter("actor");
-        String category = request.getParameter("category");
-        int time = Integer.parseInt(request.getParameter("time"));
-        String language = request.getParameter("language");
-        String description = request.getParameter("description");
-        boolean isShowing = request.getParameter("isShowing") != null;
-
-        // Xử lý file ảnh
-        InputStream inputStream = null;
-        Part filePart = request.getPart("image");
-        if (filePart != null && filePart.getSize() > 0) {
-            inputStream = filePart.getInputStream();
-        }
-
-        // Gọi DAO để thêm phim
-        MovieDAO movieDAO = new MovieDAO();
-        boolean success = movieDAO.addMovie(name, actor, category, time, language, inputStream, filePart.getSize(), description, isShowing);
-
-        if (success) {
-            response.sendRedirect("showingMovies.jsp"); // Chuyển hướng nếu thành công
-        } else {
-            response.getWriter().println("Thêm phim thất bại.");
-        }
+        processRequest(request, response);
     }
-    
-    
 
     /**
      * Returns a short description of the servlet.

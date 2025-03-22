@@ -27,8 +27,8 @@ public class MoviesController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         MovieDAO movieDAO = new MovieDAO();
-        List<Movie> movies = movieDAO.getNowShowingMovies();
+        List<Movie> movies = movieDAO.getAllMovies();
         request.setAttribute("movies", movies);
-        request.getRequestDispatcher("movies.jsp").forward(request, response);
+        request.getRequestDispatcher("views/movies.jsp").forward(request, response);
     }
 }

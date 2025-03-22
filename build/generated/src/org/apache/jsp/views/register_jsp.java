@@ -194,7 +194,7 @@ public final class register_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        </form>\n");
       out.write("\n");
       out.write("        <p class=\"login-text\">Đã có tài khoản?</p>\n");
-      out.write("        <a href=\"login.jsp\" class=\"login-btn\">Đăng nhập</a>\n");
+      out.write("        <a href=\"views/login.jsp\" class=\"login-btn\">Đăng nhập</a>\n");
       out.write("    </div>\n");
       out.write("    </body>\n");
       out.write("</html>\n");

@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@page import="dto.Movie"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -75,51 +76,67 @@
             margin-top: 10px;
             max-width: 100%;
             max-height: 300px;
+        }.file-info {
+            color: yellow;
+            font-size: 0.9em;
+            margin-top: 5px;
         }
+        
     </style>
 </head>
 <body>
+    <%
+                    // Nếu không có bean trong request, tạo bean mới trước khi sử dụng jsp:useBean
+                    Movie movie = new Movie();
+                    if (request.getAttribute("movie") == null) {
+                        request.setAttribute("movie", new Movie());
+                        movie = new Movie();
+                    } else {
+                        movie = (Movie) request.getAttribute("movie");
+                    }
+                %>
     <div class="container">
         <h2>Thêm Phim</h2>
-        <!-- 
-            Để upload file, cần method="post" và enctype="multipart/form-data"
-        -->
-        <form action="<%= request.getContextPath() %>/MainController" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/addMovieController" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="addMovie">
             <div class="form-group">
                 <label for="name">Tên phim:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="txtname" value="${movie.name}"required/>
             </div>
             <div class="form-group">
                 <label for="actor">Diễn viên:</label>
-                <input type="text" id="actor" name="actor">
+                <input type="text" id="actor" name="actor" value="${movie.actor}">
             </div>
             <div class="form-group">
                 <label for="category">Thể loại:</label>
-                <input type="text" id="category" name="category">
+                <input type="text" id="category" name="category" value="${movie.category}"/>
             </div>
             <div class="form-group">
                 <label for="time">Thời lượng (phút):</label>
-                <input type="number" id="time" name="time">
+                <input type="number" id="time" name="time" value="90" min="1" value="${movie.time}"/>
             </div>
             <div class="form-group">
                 <label for="language">Ngôn ngữ:</label>
-                <input type="text" id="language" name="language">
+                <input type="text" id="language" name="language" value="${movie.language}"/>
             </div>
             <div class="form-group">
-                <label for="image">Tên file ảnh (tuỳ chọn):</label>
-                <input type="text" id="image" name="image">
-            </div>
-            <div class="form-group">
-                <label for="imageFile">Chọn ảnh từ máy tính:</label>
-                <input type="file" id="imageFile" name="imageFile" accept="image/*" onchange="previewFile(event)">
-            </div>
-            <div class="form-group">
-                <label for="imageURL">Hoặc nhập đường dẫn ảnh:</label>
-                <input type="text" id="imageFile" name="imageFile" placeholder="Nhập URL ảnh" onchange="previewURL()">
-            </div>
-            <div class="form-group">
-                <img id="imgPreview" class="preview" src="#" alt="Xem trước ảnh" style="display: none;">
+                <label for="txtImage">Book Cover Image:</label>
+                <input type="hidden" id="txtImage" name="txtImage" value="${movie.image}"/>
+                <div class="upload-container">
+                    <div class="file-upload-wrapper">
+                        <button type="button" class="file-upload-button">Choose an Image</button>
+                        <input type="file" id="imageUpload" class="file-upload-input" accept="image/*"/>
+                    </div>
+                    <div class="file-info" id="fileInfo">No file selected</div>
+                    <div class="progress-bar-container" id="progressContainer">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+                <c:if test="${not empty requestScope.txtImage_error}">
+                    <div class="error-message">${requestScope.txtImage_error}</div>
+                </c:if>
+                <div class="image-preview" id="imagePreview">
+                </div>
             </div>
             <div class="form-group">
                 <label for="description">Mô tả:</label>
@@ -129,66 +146,106 @@
                 <label for="isShowing">Đang chiếu:</label>
                 <input type="checkbox" id="isShowing" name="isShowing">
             </div>
+            <div class="button-container">
+                <input type="submit" id="sub"class="form-button">
+            </div>
+            <%
+                String Error = (String) request.getAttribute("ERROR"); 
+                 if (Error != null) {
+            %>
+            <p class="message"><%=Error.equals("null") ? "" : Error%></p>
+            <%}%>
             <%
                 String message = (String) request.getAttribute("message"); 
                  if (message != null) {
             %>
             <p class="message"><%=message.equals("null") ? "" : message%></p>
             <%}%>
-            <div class="button-container">
-                <input type="submit" class="form-button">
-            </div>
+            
+        </form>
             <div class="button-container">
                 <button type="button" class="form-button back-button" onclick="window.location.href='<%= request.getContextPath() %>/views/home.jsp'">Trở Về Trang Chủ</button>
             </div>
-        </form>
-            
     </div>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-        // Xem trước file upload từ máy
-        function previewFile(event) {
-            const input = event.target;
-            const preview = document.getElementById('imgPreview');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        
-        // Xem trước ảnh theo đường dẫn URL được nhập
-        function previewURL() {
-            const urlInput = document.getElementById('imageURL');
-            const preview = document.getElementById('imgPreview');
-            const url = urlInput.value.trim();
-            if (url) {
-                preview.src = url;
-                preview.style.display = 'block';
-            } else {
-                preview.src = "#";
-                preview.style.display = 'none';
-            }
-        }
-        let base64Image = "";
-
-    function convertImageToBase64() {
-        var file = document.getElementById("imageFile").files[0];
-        var reader = new FileReader();
-        
-        reader.onloadend = function () {
-            base64Image = reader.result.split(",")[1]; // Lấy phần Base64 của ảnh
-            document.getElementById("imagePreview").src = reader.result;
-            document.getElementById("imagePreview").style.display = 'block';
-        };
-
+$(document).ready(function () {
+    // Hiển thị tên file khi chọn file
+    $('#imageUpload').change(function () {
+        const file = this.files[0];
         if (file) {
+            // Kiểm tra xem file có phải là hình ảnh không
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPEG, PNG, GIF, etc.)');
+                this.value = '';
+                $('#fileInfo').text('No file selected');
+                return;
+            }
+
+            // Hiển thị tên file và kích thước
+            const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+            $('#fileInfo').text(file.name + ' (' + fileSize + ')');
+
+            // Hiển thị thanh tiến trình và bắt đầu chuyển đổi sang Base64
+            $('#progressContainer').show();
+
+            // Thiết lập FileReader để đọc file và chuyển đổi sang Base64
+            const reader = new FileReader();
+
+            reader.onprogress = function (event) {
+                if (event.lengthComputable) {
+                    const percentLoaded = Math.round((event.loaded / event.total) * 100);
+                    $('#progressBar').css('width', percentLoaded + '%');
+                }
+            };
+
+            reader.onload = function (e) {
+                // Hoàn thành tiến trình
+                $('#progressBar').css('width', '100%');
+
+                // Lưu trữ dữ liệu Base64 vào input ẩn
+                const base64String = e.target.result;
+                $('#txtImage').val(base64String);
+
+                // Hiển thị hình ảnh xem trước
+                $('#imagePreview').html('<img src="' + base64String + '" alt="Preview">');
+
+                // Ẩn thanh tiến trình sau 1 giây
+                setTimeout(function () {
+                    $('#progressContainer').hide();
+                    $('#progressBar').css('width', '0%');
+                }, 1000);
+            };
+
+            reader.onerror = function () {
+                alert('Error reading the file. Please try again.');
+                $('#progressContainer').hide();
+                $('#progressBar').css('width', '0%');
+                $('#fileInfo').text('No file selected');
+            };
+
+            // Bắt đầu đọc file và chuyển đổi sang Base64
             reader.readAsDataURL(file);
+        } else {
+            $('#fileInfo').text('No file selected');
         }
+    });
+
+    // Xử lý nút Reset
+    $('#resetBtn').click(function () {
+        $('#imagePreview').empty();
+        $('#fileInfo').text('No file selected');
+        $('#txtImage').val('');
+        $('#progressContainer').hide();
+        $('#progressBar').css('width', '0%');
+    });
+
+    // Để chọn lại file đã tải lên trước đó (nếu có)
+    const existingImageSrc = $('#imagePreview img').attr('src');
+    if (existingImageSrc) {
+        $('#txtImage').val(existingImageSrc);
     }
+});
     </script>
 </body>
 </html>

@@ -57,13 +57,14 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <title>JSP Page</title>\n");
       out.write("        <style>\n");
       out.write("            body {\n");
-      out.write("            margin: 80px 0 0 0; /* Đẩy nội dung xuống sau header */\n");
-      out.write("            padding: 0;\n");
-      out.write("        }\n");
+      out.write("                margin-top: 100px;\n");
+      out.write("            }\n");
       out.write("            .button-container {\n");
       out.write("                display: flex;\n");
       out.write("                justify-content: center;\n");
-      out.write("                margin-bottom: 20px;\n");
+      out.write("                margin-top: 20px; /* Đẩy xuống thêm một chút */\n");
+      out.write("                position: relative;\n");
+      out.write("                z-index: 10;\n");
       out.write("            }\n");
       out.write("\n");
       out.write("            .add-movie-button {\n");
@@ -258,7 +259,9 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
  if (user==null) { 
       out.write("\n");
       out.write("                <div class=\"user-actions\">\n");
-      out.write("                    <a href=\"views/login.jsp\" class=\"login-btn\">\n");
+      out.write("                    <a href=\"");
+      out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${pageContext.request.contextPath}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+      out.write("/views/login.jsp\" class=\"login-btn\">\n");
       out.write("                        <img src=\"");
       out.print( request.getContextPath() );
       out.write("/image/iconuser.jpg\" alt=\"User\" class=\"icon\">\n");
@@ -272,7 +275,9 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                    <span class=\"welcome-text\">Xin chào, <span class=\"user-name\">");
       out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${sessionScope.user.fullName}", java.lang.String.class, (PageContext)_jspx_page_context, null));
       out.write("</span>!</span>\n");
-      out.write("                    <form action=\"MainController\" method=\"post\" style=\"margin: 0;\">\n");
+      out.write("                    <form action=\"");
+      out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${pageContext.request.contextPath}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+      out.write("/MainController\" method=\"post\" style=\"margin: 0;\">\n");
       out.write("                        <input type=\"hidden\" name=\"action\" value=\"logout\"/>\n");
       out.write("                        <input type=\"submit\" value=\"Đăng xuất\" class=\"logout-btn\"/>\n");
       out.write("                    </form>\n");
@@ -287,8 +292,11 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("</html>\n");
       out.write("\n");
       out.write("        <div class=\"button-container\">\n");
-      out.write("            <button class=\"add-movie-button\" onclick=\"location.href='views/admin/addMovie.jsp'\">➕ Thêm Phim</button>\n");
+      out.write("            <button class=\"add-movie-button\" onclick=\"location.href='");
+      out.print( request.getContextPath() );
+      out.write("/views/admin/addMovie.jsp'\">➕ Thêm Phim</button>\n");
       out.write("        </div>\n");
+      out.write("        \n");
       out.write("    </body>\n");
       out.write("</html>\n");
     } catch (Throwable t) {

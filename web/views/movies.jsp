@@ -15,116 +15,157 @@
         <title>Danh sách phim</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
-                background: linear-gradient(to bottom, #2a0845, #6441a5);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-            }
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
 
-            .movie-slider {
-                position: relative;
-                width: 80%;
-                overflow: hidden;
-            }
+.section-title {
+    color: yellow;
+    font-size: 24px;
+    margin: 20px 0;
+    font-weight: bold;
+}
 
-            .movie-container {
-                display: flex;
-                width: 100%;
-                overflow: hidden;
-            }
+.movie-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
 
-            .movie-list {
-                display: flex;
-                transition: transform 0.5s ease-in-out;
-            }
+.movie {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s;
+    width: 220px;
+}
 
-            .movie {
-                width: 250px;
-                margin: 0 10px;
-                text-align: center;
-                background: white;
-                border-radius: 10px;
-                padding: 10px;
-            }
+.movie:hover {
+    transform: scale(1.05);
+}
 
-            .movie img {
-                width: 100%;
-                border-radius: 10px;
-            }
+.movie-img img {
+    width: 100%;
+    border-radius: 10px;
+}
 
-            .btn {
-                background: yellow;
-                padding: 10px;
-                border: none;
-                font-size: 16px;
-                cursor: pointer;
-                margin-top: 10px;
-            }
+.movie-title {
+    color: yellow;
+    font-size: 18px;
+    margin-top: 10px;
+    font-weight: bold;
+}
 
-            /* Nút trái/phải */
-            .prev-btn, .next-btn {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background: rgba(255, 255, 255, 0.5);
-                border: none;
-                padding: 10px;
-                cursor: pointer;
-                font-size: 24px;
-            }
+.movie-description {
+    font-size: 14px;
+    margin-top: 5px;
+}
 
-            .prev-btn { left: 10px; }
-            .next-btn { right: 10px; }
+.btn-ticket {
+    background: yellow;
+    color: black;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.btn-ticket:hover {
+    background: #ffcc00;
+}
+
+.movie-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.prev-btn, .next-btn {
+    background: yellow;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.prev-btn:hover, .next-btn:hover {
+    background: #ffcc00;
+}
         </style>
-
+    </head>
     <body>
-        <div class="movie-slider">
-            <button class="prev-btn">&#10094;</button> <!-- Nút trước -->
-            <div class="movie-container">
-                <div class="movie-list">
-                    <% List<Movie> movies = (List<Movie>) request.getAttribute("movies");
-                       if (movies != null) {
-                           for (Movie movie : movies) { %>
+        <h2 class="section-title">PHIM ĐANG CHIẾU</h2>
+    <div class="movie-slider">
+        <button class="prev-btn">&#10094;</button>
+        <div class="movie-container">
+            <%
+                List<Movie> movies = (List<Movie>) request.getAttribute("movies");
+                if (movies != null && !movies.isEmpty()) {
+                    for (Movie movie : movies) {
+            %>
                         <div class="movie">
-                            <img src="data:image/jpeg;base64,<%= java.util.Base64.getEncoder().encodeToString(movie.getImage()) %>" alt="<%= movie.getName() %>">
-                            <h3><%= movie.getName() %></h3>
-                            <button class="btn">Đặt Vé</button>
+                            <div class="movie-img">
+                                <img src="<%= movie.getImage() %>" alt="<%= movie.getName() %>">
+                            </div>
+                            <h3 class="movie-title"><%= movie.getName() %></h3>
+                            <p class="movie-description">Thể loại: <%= movie.getCategory() %></p>
+                            <p class="movie-description">Thời gian: <%= movie.getTime() %> phút</p>
+                            <button class="btn-ticket">ĐẶT VÉ</button>
                         </div>
-                    <% } } %>
-                </div>
-            </div>
-            <button class="next-btn">&#10095;</button> <!-- Nút tiếp theo -->
+            <%
+                    }
+                } else {
+            %>
+                <p>Không có phim nào.</p>
+            <%
+                }
+            %>
         </div>
+        <button class="next-btn">&#10095;</button>
+    </div>
 
-    <script>
-        const movieList = document.querySelector('.movie-list');
-        const prevBtn = document.querySelector('.prev-btn');
-        const nextBtn = document.querySelector('.next-btn');
+        <script>
+            const movieList = document.querySelector('.movie-list');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
 
-        let index = 0;
-        const moviesPerSlide = 4;
-        const totalMovies = document.querySelectorAll('.movie').length;
+            let index = 0;
+            const moviesPerSlide = 4; // Số phim trượt một lần
+            const totalMovies = document.querySelectorAll('.movie').length;
+            const maxIndex = Math.ceil(totalMovies / moviesPerSlide) - 1;
 
-        nextBtn.addEventListener('click', () => {
-            if (index < totalMovies - moviesPerSlide) {
-                index++;
-            } else {
-                index = 0; // Quay lại đầu khi hết phim
+            nextBtn.addEventListener('click', () => {
+                if (index < maxIndex) {
+                    index++;
+                } else {
+                    index = 0; // Reset về đầu
+                }
+                updateSlider();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (index > 0) {
+                    index--;
+                } else {
+                    index = maxIndex; // Trở về cuối
+                }
+                updateSlider();
+            });
+
+            function updateSlider() {
+                const translateValue = -index * (moviesPerSlide * 270); // 270px per movie
+                movieList.style.transform = `translateX(${translateValue}px)`;
             }
-            movieList.style.transform = `translateX(-${index * 270}px)`;
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (index > 0) {
-                index--;
-            } else {
-                index = totalMovies - moviesPerSlide; // Quay về cuối nếu đang ở đầu
-            }
-            movieList.style.transform = `translateX(-${index * 270}px)`;
-        });
-    </script>
+        </script>
     </body>
 </html>

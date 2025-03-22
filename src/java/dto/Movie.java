@@ -16,14 +16,14 @@ public class Movie {
     private String category;
     private int time;
     private String language;
-    private byte[] image;  
+    private String image;  
     private String description;
     private boolean isShowing;
 
     public Movie() {}
 
     public Movie(String id, String name, String actor, String category, int time, 
-                 String language, byte[] image, String description, boolean isShowing) {
+                 String language, String image, String description, boolean isShowing) {
         this.id = id;
         this.name = name;
         this.actor = actor;
@@ -92,11 +92,11 @@ public class Movie {
         this.language = language;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

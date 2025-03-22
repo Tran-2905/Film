@@ -44,5 +44,6 @@
         <div class="button-container">
             <button class="add-movie-button" onclick="location.href='<%= request.getContextPath() %>/views/admin/addMovie.jsp'">➕ Thêm Phim</button>
         </div>
+        <%@include file="movies.jsp" %>
     </body>
 </html>
