@@ -26,7 +26,7 @@
                 justify-content: center;
                 margin-top: 20px; /* Đẩy xuống thêm một chút */
                 position: relative;
-                z-index: 10;
+                z-index: 100;
             }
 
             .add-movie-button {
@@ -136,46 +136,52 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
-            <c:if test="${sessionScope.user.role eq 'admin'}">
-                <div class="button-container">
-                    <button class="add-movie-button" onclick="location.href = '<%= request.getContextPath()%>/views/admin/addMovie.jsp'">➕ Thêm Phim</button>
-                </div>
-                <div class="button-container">
-                    <button class="add-movie-button" onclick="location.href = '<%= request.getContextPath()%>/views/admin/addMovie.jsp'">➕ Thêm Phim</button>
-                </div>
-            </c:if>
-            <div>
-                <h2 class="section-title">PHIM ĐANG CHIẾU</h2>
-                <div class="movie-slider">
-                    <button class="prev-btn">&#10094;</button>
-                    <div class="movie-container">
-                        <%
-                            MovieDAO movieDAO = new MovieDAO();
-                            List<Movie> movies = movieDAO.getAllMovies();
-                            if (movies != null && !movies.isEmpty()) {
-                                for (Movie movie : movies) {
-                        %>
-                        <div class="movie">
-                            <div class="movie-img">
-                                <img src="<%= movie.getImage()%>" alt="<%= movie.getName()%>">
-                            </div>
-                            <h3 class="movie-title"><%= movie.getName()%></h3>
-                            <p class="movie-description">Thể loại: <%= movie.getCategory()%></p>
-                            <p class="movie-description">Thời gian: <%= movie.getTime()%> phút</p>
-                            <button class="btn-ticket">ĐẶT VÉ</button>
-                        </div>
-                        <%
-                            }
-                        } else {
-                        %>
-                        <p>Không có phim nào.</p>
-                        <%
-                            }
-                        %>
-                    </div>
-                    <button class="next-btn">&#10095;</button>
-                </div>
+        <c:if test="${sessionScope.user.role eq 'admin'}">
+            <div class="button-container">
+                <button class="add-movie-button" onclick="location.href = '<%= request.getContextPath()%>/views/admin/addMovie.jsp'">➕ Thêm Phim</button>
             </div>
+            <div class="button-container">
+                <c:url var="updateMovieUrl" value="/MainController">
+                    <c:param name="action" value="editMovie"/>
+                </c:url>
+
+                <button class="add-movie-button" onclick="window.location = '${updateMovieUrl}'">➕ Chỉnh Sửa Phim</button>
+
+            </div>
+        </c:if>
+        <div>
+            <h2 class="section-title">PHIM ĐANG CHIẾU</h2>
+            <div class="movie-slider">
+                <button class="prev-btn">&#10094;</button>
+                <div class="movie-container">
+                    <%
+                        MovieDAO movieDAO = new MovieDAO();
+                        List<Movie> movies = movieDAO.getAllMovies();
+                        if (movies != null && !movies.isEmpty()) {
+                            for (Movie movie : movies) {
+                                if (movie.isIsShowing()) {
+                    %>
+                    <div class="movie">
+                        <div class="movie-img">
+                            <img src="<%= movie.getImage()%>" alt="<%= movie.getName()%>">
+                        </div>
+                        <h3 class="movie-title"><%= movie.getName()%></h3>
+                        <p class="movie-description">Thể loại: <%= movie.getCategory()%></p>
+                        <p class="movie-description">Thời gian: <%= movie.getTime()%> phút</p>
+                        <button class="btn-ticket">ĐẶT VÉ</button>
+                    </div>
+                    <%      }
+                        }
+                    } else {
+                    %>
+                    <p>Không có phim nào.</p>
+                    <%
+                        }
+                    %>
+                </div>
+                <button class="next-btn">&#10095;</button>
+            </div>
+        </div>
         <script>
             const movieList = document.querySelector('.movie-list');
             const prevBtn = document.querySelector('.prev-btn');

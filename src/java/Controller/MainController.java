@@ -19,45 +19,60 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MainController", urlPatterns = {"/MainController"})
 public class MainController extends HttpServlet {
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = "views/home.jsp";
         String action = request.getParameter("action");
-        try{
-            if(action == null){
+        try {
+            if (action == null) {
                 url = "views/home.jsp";
             }
-            switch(action){
-                case "login":{
+            switch (action) {
+                case "login": {
                     url = "LoginController";
                     break;
                 }
-                case "register":{
+                case "register": {
                     url = "RegisterController";
                     break;
                 }
-                case "logout":{
-                    url=processLogout(request, response);
+                case "logout": {
+                    url = processLogout(request, response);
                     break;
                 }
-                case "addMovie":{
-                    url="addMovieController";
+                case "addMovie": {
+                    url = "addMovieController";
+                    break;
+                }
+                case "editMovie": {
+                    url = "SearchMovieController";
+                    break;
+                }
+                case "delete":{
+                    url="DeleteController";
+                    break;
+                }
+                default: {
+                    url = "views/home.jsp"; 
                     break;
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             log("Error at MainController: " + e.toString());
-        }finally{
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
     private String processLogout(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "views/home.jsp";
         request.getSession().invalidate(); // Hủy phiên làm việc
         return url;
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

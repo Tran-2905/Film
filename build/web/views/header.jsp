@@ -13,11 +13,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
     <style>
+        .body{
+            margin-bottom: 50px;
+        }
         .navbar {
-            display: flex;
+            display: flex
+;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 20px;
+            /* padding: 0px 0px; */
             background-color: #0b0d19;
             position: fixed;
             top: 0;

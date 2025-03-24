@@ -6,11 +6,14 @@
 package Controller;
 
 import dao.MovieDAO;
+import dto.Movie;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "DeleteController", urlPatterns = {"/DeleteController"})
-public class DeleteController extends HttpServlet {
+@WebServlet(name = "SearchMovieController", urlPatterns = {"/SearchMovieController"})
+public class SearchMovieController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,34 +37,29 @@ public class DeleteController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String SEARCH_PAGE = "views/admin/editMovie.jsp";
-    private final String ERROR_PAGE = "views/home.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String id = request.getParameter("pk");
-            String lastSearchValue = request.getParameter("lastSearchValue");
-            System.out.println("lastSearchValue" + request.getParameter("lastSearchValue"));
-            String url = ERROR_PAGE;
+            String url = SEARCH_PAGE;
+            String searchValue = request.getParameter("txtsearchValue");
             try {
+
                 MovieDAO dao = new MovieDAO();
-                boolean result = dao.deleteMovie(id);
-                System.out.println("result=" + result);
-                System.out.println("trung:" + request.getParameter("btAction"));
-                if (result) {
-                    url = "MainController"
-                            + "?action=editMovie"
-                            + "&txtsearchValue=" + lastSearchValue;
-                    System.out.println("last=" + lastSearchValue);
+                List<Movie> result;
+
+                if (searchValue != null && !searchValue.trim().isEmpty()) {
+                    result = dao.SearchByname(searchValue);
+                } else {
+                    result = dao.getNowShowingMovies();
                 }
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (SQLException ex) {
-                Logger.getLogger(DeleteController.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                response.sendRedirect(url);
+                request.setAttribute("SEARCH_RESULT", result);
+            } catch (Exception e) {
+                log("Error at SearchMovieController: " + e.toString());
             }
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
     }
 

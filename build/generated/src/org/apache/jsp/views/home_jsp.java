@@ -404,7 +404,7 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
       org.apache.taglibs.standard.tag.rt.core.IfTag _jspx_th_c_if_0 = (org.apache.taglibs.standard.tag.rt.core.IfTag) _jspx_tagPool_c_if_test.get(org.apache.taglibs.standard.tag.rt.core.IfTag.class);
       _jspx_th_c_if_0.setPageContext(_jspx_page_context);
       _jspx_th_c_if_0.setParent(null);
-      _jspx_th_c_if_0.setTest(((java.lang.Boolean) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${sessionScope.user.getRole eq 'admin'}", java.lang.Boolean.class, (PageContext)_jspx_page_context, null)).booleanValue());
+      _jspx_th_c_if_0.setTest(((java.lang.Boolean) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${sessionScope.user.role eq 'admin'}", java.lang.Boolean.class, (PageContext)_jspx_page_context, null)).booleanValue());
       int _jspx_eval_c_if_0 = _jspx_th_c_if_0.doStartTag();
       if (_jspx_eval_c_if_0 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {
         do {
@@ -413,6 +413,11 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
           out.write("                    <button class=\"add-movie-button\" onclick=\"location.href = '");
           out.print( request.getContextPath());
           out.write("/views/admin/addMovie.jsp'\">➕ Thêm Phim</button>\n");
+          out.write("                </div>\n");
+          out.write("                <div class=\"button-container\">\n");
+          out.write("                    <button class=\"add-movie-button\" onclick=\"window.location='");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${pageContext.request.contextPath}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("/MainController?action=updateMovie'\">➕ Chỉnh Sửa Phim</button>\n");
           out.write("                </div>\n");
           out.write("            ");
           int evalDoAfterBody = _jspx_th_c_if_0.doAfterBody();

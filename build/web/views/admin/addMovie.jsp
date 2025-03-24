@@ -86,7 +86,6 @@
 </head>
 <body>
     <%
-                    // Nếu không có bean trong request, tạo bean mới trước khi sử dụng jsp:useBean
                     Movie movie = new Movie();
                     if (request.getAttribute("movie") == null) {
                         request.setAttribute("movie", new Movie());
@@ -99,6 +98,7 @@
         <h2>Thêm Phim</h2>
         <form action="${pageContext.request.contextPath}/addMovieController" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="addMovie">
+            <input type="hidden" name="action" value="${empty movie.id ? 'addMovie' : 'updateMovie'}"/>
             <div class="form-group">
                 <label for="name">Tên phim:</label>
                 <input type="text" id="name" name="txtname" value="${movie.name}"required/>
