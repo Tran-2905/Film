@@ -134,7 +134,7 @@
                 </form>
 
                 <p class="register-text">Chưa có tài khoản?</p>
-                <a href="register.jsp" class="register-btn">Đăng ký</a>
+                <a href="<%= request.getContextPath() %>/views/register.jsp" class="register-btn">Đăng ký</a>
             </div>
         </div>
     </body>

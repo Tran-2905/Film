@@ -119,6 +119,7 @@
                     <th>description</th>
                     <th>isShowing</th>
                     <th>delete</th>
+                    <th>update</th>
                 </tr>
             </thead>
             <tbody>
@@ -142,6 +143,11 @@
                             <c:param name="lastSearchValue" value="${searchValue}" />
                         </c:url>
                         <a href="${deleteLink}">delete</a>
+                    </td>
+                    <td>
+                        <a href="MainController?action=updateMovie&id=${dto.id}">
+                            Edit
+                        </a>
                     </td>
                     <input type="hidden" name="txtLastSearch" value="${searchValue}" />
                 </form>

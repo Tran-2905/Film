@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -50,12 +51,16 @@ public class MainController extends HttpServlet {
                     url = "SearchMovieController";
                     break;
                 }
-                case "delete":{
-                    url="DeleteController";
+                case "delete": {
+                    url = "DeleteController";
+                    break;
+                }
+                case "updateMovie": {
+                    url = "UpdateMovieController";
                     break;
                 }
                 default: {
-                    url = "views/home.jsp"; 
+                    url = "views/home.jsp";
                     break;
                 }
             }

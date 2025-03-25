@@ -27,11 +27,11 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        response.setContentType("text/html;charset=UTF-8");
         String userName = request.getParameter("txtUser");
         String password = request.getParameter("txtPassword");
         UserDAO userDAO = new UserDAO();
-        boolean checkLogin = userDAO.isValidLogin(userName, password);
+        boolean checkLogin = AuthUtils.isValidLogin(userName, password);
         if (checkLogin) {
             User user = userDAO.readbyID(userName);
             if (user != null) {

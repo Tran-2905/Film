@@ -44,18 +44,18 @@ public class MovieDAO {
                 if (searchValue == null) {
                     searchValue = "";
                 }
-                stm.setString(1, "%" + searchValue + "%");
+                stm.setNString(1, "%" + searchValue + "%");
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     Movie movie = new Movie();
                     movie.setId(rs.getString("id"));
-                    movie.setName(rs.getString("name"));
-                    movie.setActor(rs.getString("actor"));
-                    movie.setCategory(rs.getString("category"));
+                    movie.setName(rs.getNString("name"));
+                    movie.setActor(rs.getNString("actor"));
+                    movie.setCategory(rs.getNString("category"));
                     movie.setTime(rs.getInt("time"));
-                    movie.setLanguage(rs.getString("language"));
-                    movie.setImage(rs.getString("image"));
-                    movie.setDescription(rs.getString("description"));
+                    movie.setLanguage(rs.getNString("language"));
+                    movie.setImage(rs.getNString("image"));
+                    movie.setDescription(rs.getNString("description"));
                     movie.setIsShowing(rs.getBoolean("isShowing"));
                     movieList.add(movie);
                 }
@@ -78,7 +78,7 @@ public class MovieDAO {
         List<Movie> movieList = new ArrayList<>();
         String sql = "SELECT id, name, actor, category, time, language, image, description, isShowing "
                 + "FROM Movies "
-                + "WHERE isShowing = 1"; 
+                + "WHERE isShowing = 1";
 
         try (Connection conn = DBUtils.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql);
@@ -87,13 +87,13 @@ public class MovieDAO {
             while (rs.next()) {
                 Movie movie = new Movie();
                 movie.setId(rs.getString("id"));
-                movie.setName(rs.getString("name"));
-                movie.setActor(rs.getString("actor"));
-                movie.setCategory(rs.getString("category"));
+                movie.setName(rs.getNString("name"));
+                movie.setActor(rs.getNString("actor"));
+                movie.setCategory(rs.getNString("category"));
                 movie.setTime(rs.getInt("time"));
-                movie.setLanguage(rs.getString("language"));
-                movie.setImage(rs.getString("image"));
-                movie.setDescription(rs.getString("description"));
+                movie.setLanguage(rs.getNString("language"));
+                movie.setImage(rs.getNString("image"));
+                movie.setDescription(rs.getNString("description"));
                 movie.setIsShowing(rs.getBoolean("isShowing"));
                 movieList.add(movie);
             }
@@ -113,14 +113,14 @@ public class MovieDAO {
 
             while (rs.next()) {
                 Movie movie = new Movie();
-                movie.setId(rs.getString("id"));
-                movie.setName(rs.getString("name"));
-                movie.setActor(rs.getString("actor"));
-                movie.setCategory(rs.getString("category"));
+                movie.setId(rs.getNString("id"));
+                movie.setName(rs.getNString("name"));
+                movie.setActor(rs.getNString("actor"));
+                movie.setCategory(rs.getNString("category"));
                 movie.setTime(rs.getInt("time"));
-                movie.setLanguage(rs.getString("language"));
-                movie.setImage(rs.getString("image"));  // Lấy ảnh từ DB
-                movie.setDescription(rs.getString("description"));
+                movie.setLanguage(rs.getNString("language"));
+                movie.setImage(rs.getNString("image"));  // Lấy ảnh từ DB
+                movie.setDescription(rs.getNString("description"));
                 movie.setIsShowing(rs.getBoolean("isShowing"));
                 movies.add(movie);
             }
@@ -138,13 +138,13 @@ public class MovieDAO {
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, "MV" + System.currentTimeMillis());
-            stmt.setString(2, name);
-            stmt.setString(3, actor);
-            stmt.setString(4, category);
+            stmt.setNString(2, name);
+            stmt.setNString(3, actor);
+            stmt.setNString(4, category);
             stmt.setInt(5, time);
-            stmt.setString(6, language);
-            stmt.setString(7, image);
-            stmt.setString(8, description);
+            stmt.setNString(6, language);
+            stmt.setNString(7, image);
+            stmt.setNString(8, description);
             stmt.setBoolean(9, isShowing);
 
             return stmt.executeUpdate() > 0;
@@ -183,5 +183,95 @@ public class MovieDAO {
             }
         }
         return result;
+    }
+
+    public boolean isMovieExists(String id) {
+        String sql = "SELECT * FROM Movies WHERE id = ?";
+        try (Connection conn = DBUtils.getConnection();
+                PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public boolean updateMovie(String id, String name, String actor, String category,
+            int time, String language, String image,
+            String description, boolean isShowing)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        boolean result = false;
+
+        try {
+            con = DBUtils.getConnection();
+            String sql = "UPDATE Movies "
+                    + "SET name=?, actor=?, category=?, time=?, language=?, "
+                    + "image=?, description=?, isShowing=? "
+                    + "WHERE id=?";
+
+            stm = con.prepareStatement(sql);
+            stm.setNString(1, name);
+            stm.setNString(2, actor);
+            stm.setNString(3, category);
+            stm.setInt(4, time);
+            stm.setNString(5, language);
+            stm.setNString(6, image);
+            stm.setNString(7, description);
+            stm.setBoolean(8, isShowing);
+            stm.setNString(9, id);
+            int updateResult = stm.executeUpdate();
+            if (updateResult > 0) {
+                result = true;
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return result;
+    }
+
+    public Movie getMovieByID(String id) {
+        Movie movie = null;
+        String sql = "SELECT * FROM Movies WHERE id = ?";
+
+        try (Connection conn = DBUtils.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                movie = new Movie();
+                movie.setId(rs.getString("id"));  // ID kiểu String
+                movie.setName(rs.getNString("name"));
+                movie.setActor(rs.getNString("actor"));
+                movie.setCategory(rs.getNString("category"));
+                movie.setTime(rs.getInt("time"));
+                movie.setLanguage(rs.getNString("language"));
+                movie.setImage(rs.getNString("image"));
+                movie.setDescription(rs.getNString("description"));
+                movie.setShowing(rs.getBoolean("isShowing"));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return movie;
     }
 }

@@ -48,7 +48,7 @@ public class UserDAO implements IDAO<User, String>{
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, entity.getRole());
             pst.setString(2, entity.getUserName());
-            pst.setString(3, entity.getFullName());
+            pst.setNString(3, entity.getFullName());
             pst.setString(4, entity.getEmail());
             pst.setString(5, entity.getPassword());
             int n = pst.executeUpdate();
@@ -73,7 +73,7 @@ public class UserDAO implements IDAO<User, String>{
                 User user = new User(
                         rs.getString("role"),
                         rs.getString("username"),
-                        rs.getString("fullname"),
+                        rs.getNString("fullname"),
                         rs.getString("email"),
                         rs.getString("password")
                 );
@@ -101,7 +101,7 @@ public class UserDAO implements IDAO<User, String>{
                 user = new User(
                         rs.getString("role"),
                         rs.getString("username"),
-                        rs.getString("fullname"),
+                        rs.getNString("fullname"),
                         rs.getString("email"),
                         rs.getString("password")
                 );

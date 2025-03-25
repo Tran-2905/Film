@@ -10,6 +10,9 @@ import dto.Movie;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -24,9 +27,9 @@ import javax.servlet.http.Part;
  */
 @WebServlet(name = "addMovieController", urlPatterns = {"/addMovieController"})
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024,  // 1MB
-    maxFileSize = 1024 * 1024 * 10,   // 10MB
-    maxRequestSize = 1024 * 1024 * 50 // 50MB
+        fileSizeThreshold = 1024 * 1024, // 1MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class addMovieController extends HttpServlet {
 
@@ -41,8 +44,12 @@ public class addMovieController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+
             String name = request.getParameter("txtname");
             if (name == null || name.trim().isEmpty()) {
                 request.setAttribute("ERROR", "name cannot be empty");
@@ -87,17 +94,21 @@ public class addMovieController extends HttpServlet {
                 request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
                 return;
             }
+            String id = request.getParameter("id");
+            System.out.println("is ID " + id);
             MovieDAO movieDAO = new MovieDAO();
-            boolean success = movieDAO.addMovie(name, actor, category, time1, language, image, description, isShowing);
-            Movie movie = new Movie(time, name, actor, category, time1, language, image, description, isShowing);
-            if (success) {
-                request.setAttribute("message", "add movie successful");
-                
+            if (id != null && !id.isEmpty() && movieDAO.isMovieExists(id)) {
+                boolean updateSuccess = movieDAO.updateMovie(id, name, actor, category, time1, language, image, description, isShowing);
+                request.setAttribute("message", updateSuccess ? "Update movie successful" : "Update movie failed");
             } else {
-                request.setAttribute("message", "add movie fail");
-                request.setAttribute("Movie", movie);
+                boolean addSuccess = movieDAO.addMovie(name, actor, category, time1, language, image, description, isShowing);
+                request.setAttribute("message", addSuccess ? "Add movie successful" : "Add movie failed");
             }
             request.getRequestDispatcher("views/admin/addMovie.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(addMovieController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(addMovieController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

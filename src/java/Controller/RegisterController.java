@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import Utils.PasswordUtils;
 import dao.UserDAO;
 import dto.User;
 import java.io.IOException;
@@ -32,27 +33,57 @@ public class RegisterController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-            UserDAO userDAO = new UserDAO();
-        String txtUser = (String)request.getParameter("txtUser");
-        String txtFullName = (String)request.getParameter("txtFullName");
-        String txtEmail = (String)request.getParameter("txtEmail");
-        String txtPassword = (String)request.getParameter("txtPassword");
-        String txtPasswordAgain = (String)request.getParameter("txtPasswordAgain");
-        if(!txtPassword.equals(txtPasswordAgain)){
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String url = "views/register.jsp";
+        UserDAO userDAO = new UserDAO();
+        String txtUser = (String) request.getParameter("txtUser");
+        String txtFullName = (String) request.getParameter("txtFullName");
+        String txtEmail = (String) request.getParameter("txtEmail");
+        String txtPassword = (String) request.getParameter("txtPassword");
+        String txtPasswordAgain = (String) request.getParameter("txtPasswordAgain");
+
+        boolean hasError = false;
+
+        // Validate userID
+        if (txtUser == null || txtUser.trim().length() < 3) {
+            request.setAttribute("message", "User ID must be at least 3 characters long");
+            hasError = true;
+        }
+
+        if (txtFullName == null || txtFullName.trim().isEmpty()) {
+            request.setAttribute("message", "Full Name is required");
+            hasError = true;
+        }
+
+        if (txtEmail == null || !isValidEmail(txtEmail)) {
+            request.setAttribute("message", "Please enter a valid email address");
+            hasError = true;
+        }
+
+        if (txtPassword == null || txtPassword.length() < 6) {
+            request.setAttribute("message", "Password must be at least 6 characters long");
+            hasError = true;
+        }
+        if (!txtPassword.equals(txtPasswordAgain)) {
+            request.setAttribute("message", "password do not match");
+            hasError = true;
+        }
+        if (!userDAO.differenceUserName(txtUser)) {
+            request.setAttribute("message", "username is existed");
+            hasError = true;
+        }
+        if (hasError) {
             request.setAttribute("message", "password do not match");
             request.getRequestDispatcher("views/register.jsp").forward(request, response);
-        }else if(!userDAO.differenceUserName(txtUser)){
-            request.setAttribute("message", "username is existed");
-            request.getRequestDispatcher("views/register.jsp").forward(request, response);
-        }
-        else{
-            User user = new User(txtUser, txtFullName, txtEmail, txtPassword);
+        } else {
+            String Strpassword = PasswordUtils.hashPassword(txtPassword);
+            User user = new User("admin",txtUser, txtFullName, txtEmail, Strpassword);
             userDAO.create(user);
             request.getRequestDispatcher("views/login.jsp").forward(request, response);
         }
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -92,4 +123,11 @@ public class RegisterController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
 }

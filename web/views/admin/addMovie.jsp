@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@page import="dao.MovieDAO"%>
 <%@page import="dto.Movie"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -86,19 +87,20 @@
 </head>
 <body>
     <%
-                    Movie movie = new Movie();
-                    if (request.getAttribute("movie") == null) {
-                        request.setAttribute("movie", new Movie());
-                        movie = new Movie();
-                    } else {
-                        movie = (Movie) request.getAttribute("movie");
-                    }
-                %>
-    <div class="container">
-        <h2>Thêm Phim</h2>
+            String id = request.getParameter("id");
+            MovieDAO dao = new MovieDAO();
+            Movie movie = dao.getMovieByID(id); // Chỉ khai báo 1 lần
+
+            if (movie == null) {
+                movie = new Movie(); // Nếu không tìm thấy phim, tạo đối tượng rỗng
+            }
+            request.setAttribute("movie", movie);
+        %>
+        <div class="container">
+            welcome, ${movie.id}
         <form action="${pageContext.request.contextPath}/addMovieController" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="addMovie">
-            <input type="hidden" name="action" value="${empty movie.id ? 'addMovie' : 'updateMovie'}"/>
+            <input type="hidden" name="id" value="${movie.id}"/>
             <div class="form-group">
                 <label for="name">Tên phim:</label>
                 <input type="text" id="name" name="txtname" value="${movie.name}"required/>
