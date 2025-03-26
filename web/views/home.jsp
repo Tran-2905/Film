@@ -219,5 +219,7 @@
                 movieList.style.transform = `translateX(${translateValue}px)`;
             }
         </script>
+        
+        <%@include file="footer.jsp" %>
     </body>
 </html>
