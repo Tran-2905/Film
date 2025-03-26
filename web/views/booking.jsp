@@ -20,6 +20,8 @@
                 color: white;
                 font-family: Arial, sans-serif;
                 text-align: center;
+                margin: 0;
+                padding: 0;
             }
             .container {
                 width: 80%;
@@ -29,15 +31,19 @@
                 justify-content: center;
                 gap: 20px;
                 padding: 20px;
+                padding-top: 150px; 
             }
+
             .poster img {
                 width: 300px;
                 border-radius: 10px;
             }
+
             .details {
                 text-align: left;
                 max-width: 500px;
             }
+
             .btn {
                 background: yellow;
                 color: black;
@@ -47,6 +53,17 @@
                 cursor: pointer;
                 border-radius: 5px;
                 margin-top: 10px;
+            }
+            header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background: #000;
+                color: white;
+                padding: 15px;
+                text-align: center;
+                z-index: 1000; 
             }
         </style>
     </head>

@@ -99,74 +99,75 @@
     </head>
 
     <body>
-        <c:when test="${sessionScope.user.role eq 'admin'}">
-            <form action="MainController" method="POST">
-                <input type="hidden" name="action" value="editMovie">
-                <input type="text" name="txtsearchValue" value="${param.txtsearchValue}"/><br>
-                <input type="submit"/>
-            </form><br/>
-            <c:set var="searchValue" value="${param.txtsearchValue}"/>
-            <c:set var="result" value="${requestScope.SEARCH_RESULT}"/>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>id</th>
-                        <th>name</th>
-                        <th>actor</th>
-                        <th>category</th>
-                        <th>time</th>
-                        <th>language</th>
-                        <th>image</th>
-                        <th>description</th>
-                        <th>isShowing</th>
-                        <th>delete</th>
-                        <th>update</th>
+        <c:choose>
+            <c:when test="${sessionScope.user.role eq 'admin'}">
+                <form action="MainController" method="POST">
+                    <input type="hidden" name="action" value="editMovie">
+                    <input type="text" name="txtsearchValue" value="${param.txtsearchValue}"/><br>
+                    <input type="submit"/>
+                </form><br/>
+                <c:set var="searchValue" value="${param.txtsearchValue}"/>
+                <c:set var="result" value="${requestScope.SEARCH_RESULT}"/>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>id</th>
+                            <th>name</th>
+                            <th>actor</th>
+                            <th>category</th>
+                            <th>time</th>
+                            <th>language</th>
+                            <th>image</th>
+                            <th>description</th>
+                            <th>isShowing</th>
+                            <th>delete</th>
+                            <th>update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="dto" items="${result}" varStatus="counter">
+                            <tr> 
+                        <form action="MainController" method="POST">
+                            <td>${counter.count}</td>
+                            <td>${dto.id} <input type="hidden" name="id" value="${dto.id}" /> </td>
+                            <td>${dto.name}<input type="hidden" name="name" value="${dto.name}" /> </td>
+                            <td><img src="${dto.image}" width="200px"/></td>
+                            <td>${dto.actor}<input type="hidden" name="actor" value="${dto.actor}" /> </td>
+                            <td>${dto.category}<input type="hidden" name="category" value="${dto.category}" /></td>
+                            <td>${dto.time}<input type="hidden" name="time" value="${dto.time}" /></td>
+                            <td>${dto.language}<input type="hidden" name="language" value="${dto.language}" /></td>
+                            <td>${dto.description}<input type="hidden" name="description" value="${dto.description}" /></td>
+                            <td>${dto.isShowing}<input type="hidden" name="isShowing" value="${dto.isShowing}" /></td>
+                            <td> 
+                                <c:url var="deleteLink" value="MainController">
+                                    <c:param name="action" value="delete" />
+                                    <c:param name="pk" value="${dto.id}" />
+                                    <c:param name="lastSearchValue" value="${searchValue}" />
+                                </c:url>
+                                <a href="${deleteLink}">delete</a>
+                            </td>
+                            <td>
+                                <a href="MainController?action=updateMovie&id=${dto.id}">
+                                    Edit
+                                </a>
+                            </td>
+                            <input type="hidden" name="txtLastSearch" value="${searchValue}" />
+                        </form>
                     </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="dto" items="${result}" varStatus="counter">
-                        <tr> 
-                    <form action="MainController" method="POST">
-                        <td>${counter.count}</td>
-                        <td>${dto.id} <input type="hidden" name="id" value="${dto.id}" /> </td>
-                        <td>${dto.name}<input type="hidden" name="name" value="${dto.name}" /> </td>
-                        <td><img src="${dto.image}" width="200px"/></td>
-                        <td>${dto.actor}<input type="hidden" name="actor" value="${dto.actor}" /> </td>
-                        <td>${dto.category}<input type="hidden" name="category" value="${dto.category}" /></td>
-                        <td>${dto.time}<input type="hidden" name="time" value="${dto.time}" /></td>
-                        <td>${dto.language}<input type="hidden" name="language" value="${dto.language}" /></td>
-                        <td>${dto.description}<input type="hidden" name="description" value="${dto.description}" /></td>
-                        <td>${dto.isShowing}<input type="hidden" name="isShowing" value="${dto.isShowing}" /></td>
-                        <td> 
-                            <c:url var="deleteLink" value="MainController">
-                                <c:param name="action" value="delete" />
-                                <c:param name="pk" value="${dto.id}" />
-                                <c:param name="lastSearchValue" value="${searchValue}" />
-                            </c:url>
-                            <a href="${deleteLink}">delete</a>
-                        </td>
-                        <td>
-                            <a href="MainController?action=updateMovie&id=${dto.id}">
-                                Edit
-                            </a>
-                        </td>
-                        <input type="hidden" name="txtLastSearch" value="${searchValue}" />
-                    </form>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-    <div class="button-container">
-        <button type="button" class="form-button back-button" onclick="window.location.href = '<%= request.getContextPath()%>/views/home.jsp'">Trở Về Trang Chủ</button>
-    </div>
-</c:when>
-<c:otherwise>
-    <script>
-        alert("You are not admin! Redirecting to login page.");
-        window.location.href = "login.jsp";
-    </script>
-</c:otherwise>
+                </c:forEach>
+            </tbody>
+        </table>
+        <div class="button-container">
+            <button type="button" class="form-button back-button" onclick="window.location.href = '<%= request.getContextPath()%>/views/home.jsp'">Trở Về Trang Chủ</button>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <script>
+            alert("You are not admin! Redirecting to login page.");
+            window.location.href = "login.jsp";
+        </script>
+    </c:otherwise>
 </c:choose>
 </body>
 </html>

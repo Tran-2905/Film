@@ -90,7 +90,6 @@
     <body>
         <c:choose>
             <c:when test="${sessionScope.user.role eq 'admin'}">
-                <%@include file="../header.jsp" %>
                 <%
                     String id = request.getParameter("id");
                     MovieDAO dao = new MovieDAO();
@@ -174,7 +173,6 @@
                         <button type="button" class="form-button back-button" onclick="window.location.href = '<%= request.getContextPath()%>/views/home.jsp'">Trở Về Trang Chủ</button>
                     </div>
                 </div>
-                <%@include file="../footer.jsp" %>
             </c:when>
             <c:otherwise>
                 <script>

@@ -414,25 +414,16 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
       org.apache.taglibs.standard.tag.rt.core.IfTag _jspx_th_c_if_0 = (org.apache.taglibs.standard.tag.rt.core.IfTag) _jspx_tagPool_c_if_test.get(org.apache.taglibs.standard.tag.rt.core.IfTag.class);
       _jspx_th_c_if_0.setPageContext(_jspx_page_context);
       _jspx_th_c_if_0.setParent(null);
-      _jspx_th_c_if_0.setTest(((java.lang.Boolean) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${sessionScope.user.role eq 'admin'}", java.lang.Boolean.class, (PageContext)_jspx_page_context, null)).booleanValue());
+      _jspx_th_c_if_0.setTest(((java.lang.Boolean) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${sessionScope.user.role eq 'user'}", java.lang.Boolean.class, (PageContext)_jspx_page_context, null)).booleanValue());
       int _jspx_eval_c_if_0 = _jspx_th_c_if_0.doStartTag();
       if (_jspx_eval_c_if_0 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {
         do {
           out.write("\r\n");
-          out.write("            <div class=\"button-container\">\r\n");
-          out.write("                <button class=\"add-movie-button\" onclick=\"location.href = '");
+          out.write("        <div class=\"button-container\">\r\n");
+          out.write("            <button class=\"add-movie-button\" onclick=\"location.href = '");
           out.print( request.getContextPath());
-          out.write("/views/admin/addMovie.jsp'\">➕ Thêm Phim</button>\r\n");
-          out.write("            </div>\r\n");
-          out.write("            <div class=\"button-container\">\r\n");
-          out.write("                ");
-          if (_jspx_meth_c_url_0((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_if_0, _jspx_page_context))
-            return;
-          out.write("\r\n");
-          out.write("                <button class=\"add-movie-button\" onclick=\"window.location = '");
-          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${updateMovieUrl}", java.lang.String.class, (PageContext)_jspx_page_context, null));
-          out.write("'\">➕ Chỉnh Sửa Phim</button>\r\n");
-          out.write("            </div>\r\n");
+          out.write("/views/cart.jsp'\">➕ Giỏ hàng</button>\r\n");
+          out.write("        </div>\r\n");
           out.write("        ");
           int evalDoAfterBody = _jspx_th_c_if_0.doAfterBody();
           if (evalDoAfterBody != javax.servlet.jsp.tagext.BodyTag.EVAL_BODY_AGAIN)
@@ -444,6 +435,42 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
         return;
       }
       _jspx_tagPool_c_if_test.reuse(_jspx_th_c_if_0);
+      out.write("\r\n");
+      out.write("        ");
+      //  c:if
+      org.apache.taglibs.standard.tag.rt.core.IfTag _jspx_th_c_if_1 = (org.apache.taglibs.standard.tag.rt.core.IfTag) _jspx_tagPool_c_if_test.get(org.apache.taglibs.standard.tag.rt.core.IfTag.class);
+      _jspx_th_c_if_1.setPageContext(_jspx_page_context);
+      _jspx_th_c_if_1.setParent(null);
+      _jspx_th_c_if_1.setTest(((java.lang.Boolean) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${sessionScope.user.role eq 'admin'}", java.lang.Boolean.class, (PageContext)_jspx_page_context, null)).booleanValue());
+      int _jspx_eval_c_if_1 = _jspx_th_c_if_1.doStartTag();
+      if (_jspx_eval_c_if_1 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {
+        do {
+          out.write("\r\n");
+          out.write("            <div class=\"button-container\">\r\n");
+          out.write("                <button class=\"add-movie-button\" onclick=\"location.href = '");
+          out.print( request.getContextPath());
+          out.write("/views/admin/addMovie.jsp'\">➕ Thêm Phim</button>\r\n");
+          out.write("            </div>\r\n");
+          out.write("            <div class=\"button-container\">\r\n");
+          out.write("                ");
+          if (_jspx_meth_c_url_0((javax.servlet.jsp.tagext.JspTag) _jspx_th_c_if_1, _jspx_page_context))
+            return;
+          out.write("\r\n");
+          out.write("                <button class=\"add-movie-button\" onclick=\"window.location = '");
+          out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${updateMovieUrl}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+          out.write("'\">➕ Chỉnh Sửa Phim</button>\r\n");
+          out.write("            </div>\r\n");
+          out.write("        ");
+          int evalDoAfterBody = _jspx_th_c_if_1.doAfterBody();
+          if (evalDoAfterBody != javax.servlet.jsp.tagext.BodyTag.EVAL_BODY_AGAIN)
+            break;
+        } while (true);
+      }
+      if (_jspx_th_c_if_1.doEndTag() == javax.servlet.jsp.tagext.Tag.SKIP_PAGE) {
+        _jspx_tagPool_c_if_test.reuse(_jspx_th_c_if_1);
+        return;
+      }
+      _jspx_tagPool_c_if_test.reuse(_jspx_th_c_if_1);
       out.write("\r\n");
       out.write("        <div>\r\n");
       out.write("            <h2 class=\"section-title\">PHIM ĐANG CHIẾU</h2>\r\n");
@@ -686,14 +713,14 @@ public final class home_jsp extends org.apache.jasper.runtime.HttpJspBase
     }
   }
 
-  private boolean _jspx_meth_c_url_0(javax.servlet.jsp.tagext.JspTag _jspx_th_c_if_0, PageContext _jspx_page_context)
+  private boolean _jspx_meth_c_url_0(javax.servlet.jsp.tagext.JspTag _jspx_th_c_if_1, PageContext _jspx_page_context)
           throws Throwable {
     PageContext pageContext = _jspx_page_context;
     JspWriter out = _jspx_page_context.getOut();
     //  c:url
     org.apache.taglibs.standard.tag.rt.core.UrlTag _jspx_th_c_url_0 = (org.apache.taglibs.standard.tag.rt.core.UrlTag) _jspx_tagPool_c_url_var_value.get(org.apache.taglibs.standard.tag.rt.core.UrlTag.class);
     _jspx_th_c_url_0.setPageContext(_jspx_page_context);
-    _jspx_th_c_url_0.setParent((javax.servlet.jsp.tagext.Tag) _jspx_th_c_if_0);
+    _jspx_th_c_url_0.setParent((javax.servlet.jsp.tagext.Tag) _jspx_th_c_if_1);
     _jspx_th_c_url_0.setVar("updateMovieUrl");
     _jspx_th_c_url_0.setValue("/MainController");
     int _jspx_eval_c_url_0 = _jspx_th_c_url_0.doStartTag();

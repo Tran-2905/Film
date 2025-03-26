@@ -262,8 +262,8 @@ public class MovieDAO {
                 movie.setCategory(rs.getNString("category"));
                 movie.setTime(rs.getInt("time"));
                 movie.setLanguage(rs.getNString("language"));
-                movie.setImage(rs.getNString("image"));
-                movie.setDescription(rs.getNString("description"));
+                movie.setImage(rs.getString("image"));
+                movie.setDescription(rs.getString("description"));
                 movie.setShowing(rs.getBoolean("isShowing"));
             }
         } catch (ClassNotFoundException ex) {
