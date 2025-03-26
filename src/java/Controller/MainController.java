@@ -57,7 +57,7 @@ public class MainController extends HttpServlet {
                     break;
                 }
                 case "updateMovie": {
-                    url = "UpdateMovieController";
+                    url = "addMovieController";
                     break;
                 }
                 case "ViewCart": {

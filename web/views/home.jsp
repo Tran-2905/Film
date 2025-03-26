@@ -145,9 +145,7 @@
                 <c:url var="updateMovieUrl" value="/MainController">
                     <c:param name="action" value="editMovie"/>
                 </c:url>
-
                 <button class="add-movie-button" onclick="window.location = '${updateMovieUrl}'">➕ Chỉnh Sửa Phim</button>
-
             </div>
         </c:if>
         <div>
@@ -219,7 +217,6 @@
                 movieList.style.transform = `translateX(${translateValue}px)`;
             }
         </script>
-        
         <%@include file="footer.jsp" %>
     </body>
 </html>

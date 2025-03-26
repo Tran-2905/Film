@@ -179,7 +179,7 @@
                     <span class="welcome-text">Xin chào, <span class="user-name">${sessionScope.user.fullName}</span>!</span>
                     <form action="${pageContext.request.contextPath}/MainController" method="post" style="margin: 0;">
                         <input type="hidden" name="action" value="logout"/>
-                        <input type="submit" value="??ng xu?t" class="logout-btn"/>
+                        <input type="submit" value="Đăng xuất" class="logout-btn"/>
                     </form>
                 </div>
             <%}%>
