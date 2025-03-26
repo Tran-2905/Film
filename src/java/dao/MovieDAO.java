@@ -44,18 +44,18 @@ public class MovieDAO {
                 if (searchValue == null) {
                     searchValue = "";
                 }
-                stm.setNString(1, "%" + searchValue + "%");
+                stm.setString(1, "%" + searchValue + "%");
                 rs = stm.executeQuery();
                 while (rs.next()) {
                     Movie movie = new Movie();
                     movie.setId(rs.getString("id"));
-                    movie.setName(rs.getNString("name"));
-                    movie.setActor(rs.getNString("actor"));
-                    movie.setCategory(rs.getNString("category"));
+                    movie.setName(rs.getString("name"));
+                    movie.setActor(rs.getString("actor"));
+                    movie.setCategory(rs.getString("category"));
                     movie.setTime(rs.getInt("time"));
-                    movie.setLanguage(rs.getNString("language"));
-                    movie.setImage(rs.getNString("image"));
-                    movie.setDescription(rs.getNString("description"));
+                    movie.setLanguage(rs.getString("language"));
+                    movie.setImage(rs.getString("image"));
+                    movie.setDescription(rs.getString("description"));
                     movie.setIsShowing(rs.getBoolean("isShowing"));
                     movieList.add(movie);
                 }
@@ -138,13 +138,13 @@ public class MovieDAO {
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, "MV" + System.currentTimeMillis());
-            stmt.setNString(2, name);
-            stmt.setNString(3, actor);
-            stmt.setNString(4, category);
+            stmt.setString(2, name);
+            stmt.setString(3, actor);
+            stmt.setString(4, category);
             stmt.setInt(5, time);
-            stmt.setNString(6, language);
-            stmt.setNString(7, image);
-            stmt.setNString(8, description);
+            stmt.setString(6, language);
+            stmt.setString(7, image);
+            stmt.setString(8, description);
             stmt.setBoolean(9, isShowing);
 
             return stmt.executeUpdate() > 0;
@@ -219,15 +219,15 @@ public class MovieDAO {
                     + "WHERE id=?";
 
             stm = con.prepareStatement(sql);
-            stm.setNString(1, name);
-            stm.setNString(2, actor);
-            stm.setNString(3, category);
+            stm.setString(1, name);
+            stm.setString(2, actor);
+            stm.setString(3, category);
             stm.setInt(4, time);
-            stm.setNString(5, language);
-            stm.setNString(6, image);
-            stm.setNString(7, description);
+            stm.setString(5, language);
+            stm.setString(6, image);
+            stm.setString(7, description);
             stm.setBoolean(8, isShowing);
-            stm.setNString(9, id);
+            stm.setString(9, id);
             int updateResult = stm.executeUpdate();
             if (updateResult > 0) {
                 result = true;
@@ -257,11 +257,11 @@ public class MovieDAO {
             if (rs.next()) {
                 movie = new Movie();
                 movie.setId(rs.getString("id"));  // ID kiểu String
-                movie.setName(rs.getNString("name"));
-                movie.setActor(rs.getNString("actor"));
-                movie.setCategory(rs.getNString("category"));
+                movie.setName(rs.getString("name"));
+                movie.setActor(rs.getString("actor"));
+                movie.setCategory(rs.getString("category"));
                 movie.setTime(rs.getInt("time"));
-                movie.setLanguage(rs.getNString("language"));
+                movie.setLanguage(rs.getString("language"));
                 movie.setImage(rs.getString("image"));
                 movie.setDescription(rs.getString("description"));
                 movie.setShowing(rs.getBoolean("isShowing"));

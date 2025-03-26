@@ -41,8 +41,6 @@ public class SearchMovieController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String url = SEARCH_PAGE;
             String searchValue = request.getParameter("txtsearchValue");
