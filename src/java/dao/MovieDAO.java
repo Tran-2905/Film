@@ -87,13 +87,13 @@ public class MovieDAO {
             while (rs.next()) {
                 Movie movie = new Movie();
                 movie.setId(rs.getString("id"));
-                movie.setName(rs.getNString("name"));
-                movie.setActor(rs.getNString("actor"));
-                movie.setCategory(rs.getNString("category"));
+                movie.setName(rs.getString("name"));
+                movie.setActor(rs.getString("actor"));
+                movie.setCategory(rs.getString("category"));
                 movie.setTime(rs.getInt("time"));
-                movie.setLanguage(rs.getNString("language"));
-                movie.setImage(rs.getNString("image"));
-                movie.setDescription(rs.getNString("description"));
+                movie.setLanguage(rs.getString("language"));
+                movie.setImage(rs.getString("image"));
+                movie.setDescription(rs.getString("description"));
                 movie.setIsShowing(rs.getBoolean("isShowing"));
                 movieList.add(movie);
             }
@@ -113,14 +113,14 @@ public class MovieDAO {
 
             while (rs.next()) {
                 Movie movie = new Movie();
-                movie.setId(rs.getNString("id"));
-                movie.setName(rs.getNString("name"));
-                movie.setActor(rs.getNString("actor"));
-                movie.setCategory(rs.getNString("category"));
+                movie.setId(rs.getString("id"));
+                movie.setName(rs.getString("name"));
+                movie.setActor(rs.getString("actor"));
+                movie.setCategory(rs.getString("category"));
                 movie.setTime(rs.getInt("time"));
-                movie.setLanguage(rs.getNString("language"));
-                movie.setImage(rs.getNString("image"));  // Lấy ảnh từ DB
-                movie.setDescription(rs.getNString("description"));
+                movie.setLanguage(rs.getString("language"));
+                movie.setImage(rs.getString("image"));  // Lấy ảnh từ DB
+                movie.setDescription(rs.getString("description"));
                 movie.setIsShowing(rs.getBoolean("isShowing"));
                 movies.add(movie);
             }

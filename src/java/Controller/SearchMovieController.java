@@ -41,6 +41,8 @@ public class SearchMovieController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String url = SEARCH_PAGE;
             String searchValue = request.getParameter("txtsearchValue");
@@ -48,7 +50,6 @@ public class SearchMovieController extends HttpServlet {
 
                 MovieDAO dao = new MovieDAO();
                 List<Movie> result;
-
                 if (searchValue != null && !searchValue.trim().isEmpty()) {
                     result = dao.SearchByname(searchValue);
                 } else {

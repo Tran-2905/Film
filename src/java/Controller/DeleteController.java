@@ -35,9 +35,12 @@ public class DeleteController extends HttpServlet {
      */
     private final String SEARCH_PAGE = "views/admin/editMovie.jsp";
     private final String ERROR_PAGE = "views/home.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String id = request.getParameter("pk");

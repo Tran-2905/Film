@@ -5,7 +5,7 @@
 --%>
 
 <%@page import="dto.User"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -104,7 +104,7 @@
             font-size: 16px;
             font-weight: bold;
             color: yellow;
-            text-decoration: none; /* Bỏ gạch dưới */
+            text-decoration: none; /* B? g?ch d??i */
         }
 
         .login-btn .icon {
@@ -121,16 +121,16 @@
             }
 
             .welcome-text {
-                /* Màu vàng cho chữ “Xin chào” và tên user */
+                /* Màu vàng cho ch? ?Xin chào? và tên user */
                 color: #FFD700;
                 font-size: 16px;
                 font-weight: bold;
             }
 
             .logout-btn {
-                /* CSS cho nút Đăng xuất */
-                background-color: #ff4b2b;  /* Chọn màu nền tùy ý */
-                color: #ffffff;            /* Màu chữ */
+                /* CSS cho nút ??ng xu?t */
+                background-color: #ff4b2b;  /* Ch?n màu n?n tùy ý */
+                color: #ffffff;            /* Màu ch? */
                 padding: 10px 15px;
                 border: none;
                 border-radius: 5px;
@@ -140,7 +140,7 @@
             }
 
             .logout-btn:hover {
-                background-color: #e33e1f; /* Màu nền khi hover */
+                background-color: #e33e1f; /* Màu n?n khi hover */
             }     
     </style>
 </head>
@@ -155,17 +155,15 @@
 
         <nav class="nav-links">
             <button class="btn yellow">
-                <img src="ticket-icon.png" alt="Ticket" class="icon">
                 ĐẶT VÉ NGAY
             </button>
             <button class="btn purple">
-                <img src="popcorn-icon.png" alt="Popcorn" class="icon">
                 ĐẶT BẮP NƯỚC
             </button>
         </nav>
 
         <div class="search-bar">
-            <input type="text" placeholder="Tìm phim, rạp">
+            <input type="text" placeholder="Tìm phim, rạp...">
             <img src="<%= request.getContextPath() %>/image/searchbutton.png" width="400" height="16" alt="Search" class="search-icon">
         </div>
         <div>
@@ -181,7 +179,7 @@
                     <span class="welcome-text">Xin chào, <span class="user-name">${sessionScope.user.fullName}</span>!</span>
                     <form action="${pageContext.request.contextPath}/MainController" method="post" style="margin: 0;">
                         <input type="hidden" name="action" value="logout"/>
-                        <input type="submit" value="Đăng xuất" class="logout-btn"/>
+                        <input type="submit" value="??ng xu?t" class="logout-btn"/>
                     </form>
                 </div>
             <%}%>

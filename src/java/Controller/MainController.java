@@ -6,7 +6,6 @@
 package Controller;
 
 import java.io.IOException;
-import static java.lang.System.out;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +23,8 @@ public class MainController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String url = "views/home.jsp";
         String action = request.getParameter("action");
         try {
@@ -59,6 +60,19 @@ public class MainController extends HttpServlet {
                     url = "UpdateMovieController";
                     break;
                 }
+                case "ViewCart": {
+                    url = "CartController";
+                    break;
+                }
+                case "UpdateCart":
+                    url = "CartController";
+                    break;
+                case "RemoveFromCart":
+                    url = "CartController";
+                    break;
+                case "AddToCart":
+                    url = "CartController?action=AddToCart";
+                    break;
                 default: {
                     url = "views/home.jsp";
                     break;

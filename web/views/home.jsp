@@ -7,7 +7,8 @@
 <%@page import="dao.MovieDAO"%>
 <%@page import="dto.Movie"%>
 <%@page import="java.util.List"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
@@ -168,7 +169,10 @@
                         <h3 class="movie-title"><%= movie.getName()%></h3>
                         <p class="movie-description">Thể loại: <%= movie.getCategory()%></p>
                         <p class="movie-description">Thời gian: <%= movie.getTime()%> phút</p>
-                        <button class="btn-ticket">ĐẶT VÉ</button>
+                        <form action="<%= request.getContextPath()%>/views/booking.jsp" method="get">
+                            <input type="hidden" name="movieId" value="<%= movie.getId()%>">
+                            <button type="submit" class="btn-ticket">ĐẶT VÉ</button>
+                        </form>
                     </div>
                     <%      }
                         }

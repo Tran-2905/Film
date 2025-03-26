@@ -35,6 +35,8 @@ public class RegisterController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String url = "views/register.jsp";
         UserDAO userDAO = new UserDAO();
         String txtUser = (String) request.getParameter("txtUser");
@@ -78,7 +80,7 @@ public class RegisterController extends HttpServlet {
             request.getRequestDispatcher("views/register.jsp").forward(request, response);
         } else {
             String Strpassword = PasswordUtils.hashPassword(txtPassword);
-            User user = new User("admin",txtUser, txtFullName, txtEmail, Strpassword);
+            User user = new User(txtUser, txtFullName, txtEmail, Strpassword);
             userDAO.create(user);
             request.getRequestDispatcher("views/login.jsp").forward(request, response);
         }
