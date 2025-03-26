@@ -122,47 +122,60 @@
         </style>
     </head>
     <body>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>quantity</th>
-                    <th>price</th>
-                    <th>Total</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="dto" items="${cartItems}" varStatus="counter">
-                    <tr> 
-                        <td>${counter.count}</td>
-                        <td>${dto.movieID}<input type="hidden" name="movieID" value="${dto.movieID}" /> </td>
-                        <td>${dto.movieName}<input type="hidden" name="movieName" value="${dto.movieName}" /> </td>
-                        <td>
-                            <form action="MainController" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="UpdateCart">
-                                <input type="hidden" name="movieID" value="${dto.movieID}">
-                                <input type="number" name="quantity" value="${dto.quantity}" min="1" class="form-control d-inline-block" style="width: 60px;">
-                                <button type="submit" class="btn btn-success btn-sm">Update</button>
-                            </form> 
-                        </td>
-                        <td>45.000<input type="hidden" name="price" value="45" /></td>
-                        <td>${dto.quantity*45}</td>
-                        <td>
-                            <form action="MainController" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="RemoveFromCart">
-                                <input type="hidden" name="movieID" value="${dto.movieID}">
-                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                            </form>
-                        </td>
+        <c:if test="${sessionScope.user.role eq 'user'}">
+            <c:set var="sum" value="0" />   
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>id</th>
+                        <th>name</th>
+                        <th>quantity</th>
+                        <th>price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
                     </tr>
-                </c:forEach>
-        </tbody>
-    </table>
-    <div class="button-container">
-        <button type="button" class="form-button back-button" onclick="window.location.href = '<%= request.getContextPath()%>/views/home.jsp'">Trở Về Trang Chủ</button>
-    </div>
-</body>
+                </thead>
+                <tbody>
+
+                    <c:forEach var="dto" items="${cartItems}" varStatus="counter">
+                        <tr> 
+                            <td>${counter.count}</td>
+                            <td>${dto.movieID}<input type="hidden" name="movieID" value="${dto.movieID}" /> </td>
+                            <td>${dto.movieName}<input type="hidden" name="movieName" value="${dto.movieName}" /> </td>
+                            <td>
+                                <form action="MainController" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="UpdateCart">
+                                    <input type="hidden" name="movieID" value="${dto.movieID}">
+                                    <input type="number" name="quantity" value="${dto.quantity}" min="1" class="form-control d-inline-block" style="width: 60px;">
+                                    <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                </form> 
+                            </td>
+                            <td>45.000<input type="hidden" name="price" value="45" /></td>
+                            <td>${dto.quantity*45}</td>
+                            <td>
+                                <form action="MainController" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="RemoveFromCart">
+                                    <input type="hidden" name="movieID" value="${dto.movieID}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <c:set var="itemTotal" value="${dto.quantity * 45000}" />
+                        <c:set var="sum" value="${sum + itemTotal}" />
+                    </c:forEach>
+                </tbody>
+            </table>
+            <h3>Total: <fmt:formatNumber value="${sum}" type="number" pattern="#,##0" /> VND</h3>
+            <%
+                String message = request.getAttribute("ERROR") + "";
+            %>
+            <p class="message"><%=message.equals("null") ? "" : message%></p>
+
+             
+            <div class="button-container">
+                <button type="button" class="form-button back-button" onclick="window.location.href = '<%= request.getContextPath()%>/views/home.jsp'">Trở Về Trang Chủ</button>
+            </div>
+        </c:if>
+    </body>
 </html>

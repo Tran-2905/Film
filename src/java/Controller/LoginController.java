@@ -39,6 +39,7 @@ public class LoginController extends HttpServlet {
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
+                session.setAttribute("userID", user.getUserName());
                 request.getRequestDispatcher("views/home.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "User not found. Please try again.");

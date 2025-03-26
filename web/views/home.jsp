@@ -137,6 +137,11 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
+        <c:if test="${sessionScope.user.role eq 'user'}">
+        <div class="button-container">
+            <button class="add-movie-button" onclick="location.href = '<%= request.getContextPath()%>/views/cart.jsp'">➕ Giỏ hàng</button>
+        </div>
+        </c:if>
         <c:if test="${sessionScope.user.role eq 'admin'}">
             <div class="button-container">
                 <button class="add-movie-button" onclick="location.href = '<%= request.getContextPath()%>/views/admin/addMovie.jsp'">➕ Thêm Phim</button>

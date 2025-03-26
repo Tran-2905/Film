@@ -25,7 +25,7 @@ public class OrderDAO {
     public void placeOrder(String userID, double totalAmount, HttpSession session) throws Exception {
     String orderID = "ORD" + UUID.randomUUID().toString().replace("-", "").substring(0, 10);
     String insertOrderSQL = "INSERT INTO tblOrders (orderID, userID, orderDate, totalAmount) VALUES (?, ?, ?, ?)";
-    String insertOrderDetailSQL = "INSERT INTO tblOrderDetails (orderID, MovieID, quantity, price) VALUES (?, ?, ?, ?)";
+    String insertOrderDetailSQL = "INSERT INTO OrderDetails (orderID, MovieID, quantity, price) VALUES (?, ?, ?, ?)";
 
     List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cartItems");
 

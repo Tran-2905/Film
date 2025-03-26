@@ -99,21 +99,12 @@ public class CartController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         CartDAO cartDAO = new CartDAO();
-
         try {
-            System.out.println("[DEBUG] Retrieving cart items... Session ID: " + session.getId());
-
             List<CartItem> cartItems = cartDAO.getCartItems(session);
-            if (cartItems == null) {
-                System.out.println("[ERROR] Cart items are null!");
-            } else {
-                System.out.println("[DEBUG] Cart items retrieved: " + cartItems.size());
-            }
             request.setAttribute("cartItems", cartItems);
             request.getRequestDispatcher("views/cart.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("[ERROR] Exception in retrieving cart items: " + e.getMessage());
             request.setAttribute("ERROR", "Failed to retrieve cart items.");
             request.getRequestDispatcher("views/booking.jsp").forward(request, response);
         }

@@ -73,6 +73,9 @@ public class MainController extends HttpServlet {
                 case "AddToCart":
                     url = "CartController?action=AddToCart";
                     break;
+                case "PlaceOrder":
+                    url = "OrderController";
+                    break;
                 default: {
                     url = "views/home.jsp";
                     break;
